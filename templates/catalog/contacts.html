@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}Контакты - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h1 class="display-4">Контакты</h1>
+    </div>
+</div>
+
+{% if success_message %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> {{ success_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <!-- Форма обратной связи -->
+    <div class="col-lg-6 mb-5">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">
+                    <i class="bi bi-envelope-paper"></i> Форма обратной связи
+                </h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">
+                            <i class="bi bi-person"></i> {{ form.name.label }}
+                        </label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                            <i class="bi bi-envelope"></i> {{ form.email.label }}
+                        </label>
+                        {{ form.email }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.telegram.id_for_label }}" class="form-label">
+                            <i class="bi bi-telegram"></i> {{ form.telegram.label }}
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">@</span>
+                            {{ form.telegram }}
+                        </div>
+                        <div class="form-text">Необязательное поле</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.message.id_for_label }}" class="form-label">
+                            <i class="bi bi-chat-left-text"></i> {{ form.message.label }}
+                        </label>
+                        {{ form.message }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-send"></i> Отправить сообщение
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Контактная информация -->
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h3 class="card-title mb-4">
+                    <i class="bi bi-info-circle"></i> Наши контакты
+                </h3>
+                
+                <p class="card-text mb-4">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis 
+                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                
+                <div class="contact-info">
+                    <div class="mb-3">
+                        <h5><i class="bi bi-geo-alt text-primary"></i> Адрес</h5>
+                        <p class="ms-4">г. Москва, ул. Примерная, д. 123, офис 456</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5><i class="bi bi-telephone text-primary"></i> Телефон</h5>
+                        <p class="ms-4">+7 (999) 123-45-67</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5><i class="bi bi-envelope text-primary"></i> Email</h5>
+                        <p class="ms-4">info@example.com</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5><i class="bi bi-clock text-primary"></i> Время работы</h5>
+                        <p class="ms-4">Пн-Пт: 9:00 - 18:00<br>Сб-Вс: 10:00 - 16:00</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-4">
+                    <h5><i class="bi bi-lightbulb"></i> Примечание</h5>
+                    <p class="mb-0">
+                        While these feedback styles cannot be styled with CSS, you can still customize 
+                        the feedback text through JavaScript.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    <i class="bi bi-map"></i> Как добраться
+                </h4>
+                <div class="ratio ratio-16x9">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.372789932777!2d37.61729991574149!3d55.75582699804744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1647851234567!5m2!1sru!2sru" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
