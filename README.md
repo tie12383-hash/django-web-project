@@ -13,5 +13,5 @@
 
 ### Клонирование репозитория
 ```bash
-git clone https://github.com/ваш-username/django-web-project.git
+git clone https://github.com/tie12383-hash/django-web-project.git
 cd django-web-project
