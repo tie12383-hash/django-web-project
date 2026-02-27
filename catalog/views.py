@@ -1,61 +1,45 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator
+from .models import Product, Category, Contact
 from .forms import ContactForm
 
 
 def home(request):
     """Контроллер для главной страницы"""
+    latest_products = Product.objects.all().order_by('-created_at')[:5]
+
+    print("\n" + "=" * 60)
+    print("ПОСЛЕДНИЕ 5 СОЗДАННЫХ ПРОДУКТОВ:")
+    print("=" * 60)
+    for product in latest_products:
+        print(f"Название: {product.name}")
+        print(f"Категория: {product.category}")
+        print(f"Цена: {product.price}")
+        print(f"Дата создания: {product.created_at}")
+        print("-" * 40)
+    print("=" * 60 + "\n")
+
     context = {
         'title': 'Главная',
-        'products': [
-            {
-                'name': 'Товар 1',
-                'price': '$100',
-                'features': [
-                    '10 пользователей',
-                    '2 GB хранилища',
-                    'Email поддержка',
-                    'Help center access'
-                ]
-            },
-            {
-                'name': 'Товар 2',
-                'price': '$200',
-                'features': [
-                    '20 пользователей',
-                    '5 GB хранилища',
-                    'Приоритетная поддержка',
-                    'Расширенная помощь'
-                ]
-            },
-            {
-                'name': 'Товар 3',
-                'price': '$300',
-                'features': [
-                    'Безлимитные пользователи',
-                    '10 GB хранилища',
-                    '24/7 поддержка',
-                    'Персональный менеджер'
-                ]
-            }
-        ]
+        'latest_products': latest_products,
+        'categories': Category.objects.all()[:4],
     }
     return render(request, 'catalog/home.html', context)
 
 
 def contacts(request):
     """Контроллер для страницы контактов"""
+    contact_info = Contact.objects.filter(is_active=True)
+
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Здесь можно добавить логику обработки формы
-            # Например, отправка email или сохранение в базу данных
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             telegram = form.cleaned_data['telegram']
             message = form.cleaned_data['message']
 
-            # Выводим данные в консоль (как требовалось в задании)
             print("\n" + "=" * 50)
             print("ДАННЫЕ ФОРМЫ ОБРАТНОЙ СВЯЗИ:")
             print("=" * 50)
@@ -65,10 +49,10 @@ def contacts(request):
             print(f"Сообщение: {message}")
             print("=" * 50 + "\n")
 
-            # Добавляем сообщение об успехе
             context = {
                 'title': 'Контакты',
                 'form': form,
+                'contact_info': contact_info,
                 'success_message': 'Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.'
             }
             return render(request, 'catalog/contacts.html', context)
@@ -77,6 +61,20 @@ def contacts(request):
 
     context = {
         'title': 'Контакты',
-        'form': form
+        'form': form,
+        'contact_info': contact_info
     }
     return render(request, 'catalog/contacts.html', context)
+
+
+def category_products(request, category_id):
+    """Контроллер для отображения товаров по категории"""
+    category = Category.objects.get(id=category_id)
+    products = Product.objects.filter(category=category)
+
+    context = {
+        'title': f'Категория: {category.name}',
+        'category': category,
+        'products': products
+    }
+    return render(request, 'catalog/category_products.html', context)

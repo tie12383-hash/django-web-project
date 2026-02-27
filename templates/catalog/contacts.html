@@ -20,8 +20,69 @@
 </div>
 {% endif %}
 
+<!-- Контактная информация из базы данных -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3><i class="bi bi-geo-alt"></i> Наши контакты</h3>
+    </div>
+
+    {% for contact in contact_info %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ contact.name }}</h5>
+                <div class="contact-details">
+                    {% if contact.email %}
+                    <p class="mb-2">
+                        <i class="bi bi-envelope text-primary"></i>
+                        <strong>Email:</strong>
+                        <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                    </p>
+                    {% endif %}
+
+                    {% if contact.phone %}
+                    <p class="mb-2">
+                        <i class="bi bi-telephone text-primary"></i>
+                        <strong>Телефон:</strong>
+                        <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                    </p>
+                    {% endif %}
+
+                    {% if contact.address %}
+                    <p class="mb-2">
+                        <i class="bi bi-geo text-primary"></i>
+                        <strong>Адрес:</strong> {{ contact.address }}
+                    </p>
+                    {% endif %}
+
+                    {% if contact.working_hours %}
+                    <p class="mb-2">
+                        <i class="bi bi-clock text-primary"></i>
+                        <strong>Часы работы:</strong> {{ contact.working_hours }}
+                    </p>
+                    {% endif %}
+
+                    {% if contact.description %}
+                    <p class="mt-3">
+                        <strong>Описание:</strong><br>
+                        {{ contact.description }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Контактная информация не настроена
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Форма обратной связи -->
 <div class="row">
-    <!-- Форма обратной связи -->
     <div class="col-lg-6 mb-5">
         <div class="card">
             <div class="card-body">
@@ -30,21 +91,21 @@
                 </h3>
                 <form method="POST">
                     {% csrf_token %}
-                    
+
                     <div class="mb-3">
                         <label for="{{ form.name.id_for_label }}" class="form-label">
                             <i class="bi bi-person"></i> {{ form.name.label }}
                         </label>
                         {{ form.name }}
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="{{ form.email.id_for_label }}" class="form-label">
                             <i class="bi bi-envelope"></i> {{ form.email.label }}
                         </label>
                         {{ form.email }}
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="{{ form.telegram.id_for_label }}" class="form-label">
                             <i class="bi bi-telegram"></i> {{ form.telegram.label }}
@@ -55,14 +116,14 @@
                         </div>
                         <div class="form-text">Необязательное поле</div>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label for="{{ form.message.id_for_label }}" class="form-label">
                             <i class="bi bi-chat-left-text"></i> {{ form.message.label }}
                         </label>
                         {{ form.message }}
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary btn-lg w-100">
                         <i class="bi bi-send"></i> Отправить сообщение
                     </button>
@@ -70,69 +131,42 @@
             </div>
         </div>
     </div>
-    
-    <!-- Контактная информация -->
+
+    <!-- Дополнительная информация -->
     <div class="col-lg-6">
         <div class="card h-100">
             <div class="card-body">
                 <h3 class="card-title mb-4">
-                    <i class="bi bi-info-circle"></i> Наши контакты
+                    <i class="bi bi-info-circle"></i> Как с нами связаться
                 </h3>
-                
+
                 <p class="card-text mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis 
-                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Мы всегда рады помочь вам! Используйте любую удобную форму связи:
                 </p>
-                
-                <div class="contact-info">
+
+                <div class="contact-methods">
                     <div class="mb-3">
-                        <h5><i class="bi bi-geo-alt text-primary"></i> Адрес</h5>
-                        <p class="ms-4">г. Москва, ул. Примерная, д. 123, офис 456</p>
+                        <h5><i class="bi bi-telephone-fill text-success"></i> Телефон</h5>
+                        <p class="ms-4">Позвоните нам по телефону, указанному выше</p>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <h5><i class="bi bi-telephone text-primary"></i> Телефон</h5>
-                        <p class="ms-4">+7 (999) 123-45-67</p>
+                        <h5><i class="bi bi-envelope-fill text-primary"></i> Email</h5>
+                        <p class="ms-4">Напишите нам на email, ответим в течение 24 часов</p>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <h5><i class="bi bi-envelope text-primary"></i> Email</h5>
-                        <p class="ms-4">info@example.com</p>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <h5><i class="bi bi-clock text-primary"></i> Время работы</h5>
-                        <p class="ms-4">Пн-Пт: 9:00 - 18:00<br>Сб-Вс: 10:00 - 16:00</p>
+                        <h5><i class="bi bi-chat-left-text-fill text-warning"></i> Форма обратной связи</h5>
+                        <p class="ms-4">Заполните форму слева, и мы обязательно вам ответим</p>
                     </div>
                 </div>
-                
+
                 <div class="alert alert-info mt-4">
                     <h5><i class="bi bi-lightbulb"></i> Примечание</h5>
                     <p class="mb-0">
-                        While these feedback styles cannot be styled with CSS, you can still customize 
+                        While these feedback styles cannot be styled with CSS, you can still customize
                         the feedback text through JavaScript.
                     </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">
-                    <i class="bi bi-map"></i> Как добраться
-                </h4>
-                <div class="ratio ratio-16x9">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.372789932777!2d37.61729991574149!3d55.75582699804744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2z0JzQvtGB0LrQstCw!5e0!3m2!1sru!2sru!4v1647851234567!5m2!1sru!2sru" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy">
-                    </iframe>
                 </div>
             </div>
         </div>

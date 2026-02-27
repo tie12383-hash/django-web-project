@@ -1,4 +1,5 @@
 from django import forms
+from .models import Contact
 
 class ContactForm(forms.Form):
     name = forms.CharField(
@@ -33,3 +34,17 @@ class ContactForm(forms.Form):
             'placeholder': 'Ваше сообщение...'
         })
     )
+
+
+class ContactModelForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'phone', 'address', 'working_hours', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'working_hours': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
