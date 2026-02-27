@@ -1,0 +1,41 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Смартфон iPhone 14",
+      "description": "Новейший смартфон Apple с камерой 48 МП",
+      "image": "",
+      "category": 1,
+      "price": "89990.00",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "Ноутбук MacBook Pro",
+      "description": "Мощный ноутбук для работы и творчества",
+      "image": "",
+      "category": 1,
+      "price": "149990.00",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Футболка мужская",
+      "description": "Хлопковая футболка, 100% хлопок",
+      "image": "",
+      "category": 2,
+      "price": "1990.00",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  }
+]
