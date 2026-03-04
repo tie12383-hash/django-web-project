@@ -1,41 +1,54 @@
 [
-  {
-    "model": "catalog.product",
-    "pk": 1,
-    "fields": {
-      "name": "РЎРјР°СЂС‚С„РѕРЅ iPhone 14",
-      "description": "РќРѕРІРµР№С€РёР№ СЃРјР°СЂС‚С„РѕРЅ Apple СЃ РєР°РјРµСЂРѕР№ 48 РњРџ",
-      "image": "",
-      "category": 1,
-      "price": "89990.00",
-      "created_at": "2024-01-15T10:00:00Z",
-      "updated_at": "2024-01-15T10:00:00Z"
-    }
-  },
-  {
-    "model": "catalog.product",
-    "pk": 2,
-    "fields": {
-      "name": "РќРѕСѓС‚Р±СѓРє MacBook Pro",
-      "description": "РњРѕС‰РЅС‹Р№ РЅРѕСѓС‚Р±СѓРє РґР»СЏ СЂР°Р±РѕС‚С‹ Рё С‚РІРѕСЂС‡РµСЃС‚РІР°",
-      "image": "",
-      "category": 1,
-      "price": "149990.00",
-      "created_at": "2024-01-15T10:00:00Z",
-      "updated_at": "2024-01-15T10:00:00Z"
-    }
-  },
-  {
-    "model": "catalog.product",
-    "pk": 3,
-    "fields": {
-      "name": "Р¤СѓС‚Р±РѕР»РєР° РјСѓР¶СЃРєР°СЏ",
-      "description": "РҐР»РѕРїРєРѕРІР°СЏ С„СѓС‚Р±РѕР»РєР°, 100% С…Р»РѕРїРѕРє",
-      "image": "",
-      "category": 2,
-      "price": "1990.00",
-      "created_at": "2024-01-15T10:00:00Z",
-      "updated_at": "2024-01-15T10:00:00Z"
-    }
+{
+  "model": "catalog.product",
+  "pk": 1,
+  "fields": {
+    "name": "Смартфон",
+    "description": "Современный смартфон с отличной камерой",
+    "image": "",
+    "category": 1,
+    "price": "23000.00",
+    "created_at": "2026-03-04T23:31:14.941Z",
+    "updated_at": "2026-03-04T23:32:59.406Z"
   }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "name": "Ноутбук",
+    "description": "Мощный ноутбук для работы и игр",
+    "image": "",
+    "category": 1,
+    "price": "75000.00",
+    "created_at": "2026-03-04T23:31:14.951Z",
+    "updated_at": "2026-03-04T23:31:14.952Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 3,
+  "fields": {
+    "name": "Футболка",
+    "description": "Хлопковая футболка",
+    "image": "",
+    "category": 2,
+    "price": "1500.00",
+    "created_at": "2026-03-04T23:31:14.956Z",
+    "updated_at": "2026-03-04T23:31:14.956Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 5,
+  "fields": {
+    "name": "Война и мир",
+    "description": "Роман Л.Н. Толстого",
+    "image": "",
+    "category": 3,
+    "price": "1200.00",
+    "created_at": "2026-03-04T23:31:14.966Z",
+    "updated_at": "2026-03-04T23:31:14.966Z"
+  }
+}
 ]
