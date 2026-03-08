@@ -3,26 +3,37 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator
 from .models import Product, Category, Contact
 from .forms import ContactForm
+from django.shortcuts import render, get_object_or_404
+from .models import Product
+from django.shortcuts import redirect, render
+from .forms import ProductForm
+
+def product_create(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('catalog:home')
+    else:
+        form = ProductForm()
+    context = {'form': form}
+    return render(request, 'catalog/product_form.html', context)
+
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    context = {'product': product}
+    return render(request, 'catalog/product_detail.html', context)
 
 
 def home(request):
-    """Контроллер для главной страницы"""
-    latest_products = Product.objects.all().order_by('-created_at')[:5]
-
-    print("\n" + "=" * 60)
-    print("ПОСЛЕДНИЕ 5 СОЗДАННЫХ ПРОДУКТОВ:")
-    print("=" * 60)
-    for product in latest_products:
-        print(f"Название: {product.name}")
-        print(f"Категория: {product.category}")
-        print(f"Цена: {product.price}")
-        print(f"Дата создания: {product.created_at}")
-        print("-" * 40)
-    print("=" * 60 + "\n")
+    product_list = Product.objects.all().order_by('-created_at')
+    paginator = Paginator(product_list, 6)  # 6 товаров на странице
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
         'title': 'Главная',
-        'latest_products': latest_products,
+        'page_obj': page_obj,
         'categories': Category.objects.all()[:4],
     }
     return render(request, 'catalog/home.html', context)
