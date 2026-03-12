@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <article>
+            <h1>{{ post.title }}</h1>
+            <p class="text-muted">
+                Дата публикации: {{ post.created_at|date:"d.m.Y H:i" }} |
+                Просмотров: {{ post.views }}
+            </p>
+            {% if post.preview %}
+                <img src="{{ post.preview.url }}" class="img-fluid mb-4" alt="{{ post.title }}">
+            {% endif %}
+            <div class="content">
+                {{ post.content|linebreaks }}
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'blog:list' %}" class="btn btn-secondary">← Назад к списку</a>
+                <div>
+                    <a href="{% url 'blog:update' post.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'blog:delete' post.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %}
