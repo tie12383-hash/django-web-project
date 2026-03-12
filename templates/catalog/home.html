@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'ba{% extends 'base.html' %}
 
 {% block title %}Главная - {{ block.super }}{% endblock %}
 
@@ -10,7 +10,6 @@
     </div>
 </div>
 
-<!-- Последние товары -->
 <div class="row mb-4">
     <div class="col-12">
         <h2><i class="bi bi-grid"></i> Наши товары</h2>
@@ -46,7 +45,6 @@
     {% endfor %}
 </div>
 
-<!-- Пагинация -->
 {% if page_obj.has_other_pages %}
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
