@@ -1,13 +1,14 @@
-{% extends 'ba{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Главная - {{ block.super }}{% endblock %}
 
 {% block content %}
 <div class="row mb-5">
-    <div class="col-12">
+    <div class="col-12 d-flex justify-content-between align-items-center">
         <h1 class="display-4">Добро пожаловать в наш магазин!</h1>
-        <p class="lead">Вы находитесь на сайте, предназначенном для продажи товаров.</p>
+        <a href="{% url 'catalog:product_create' %}" class="btn btn-success">+ Добавить товар</a>
     </div>
+    <p class="lead">Вы находитесь на сайте, предназначенном для продажи товаров.</p>
 </div>
 
 <div class="row mb-4">
