@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Product
+from .models import Product, Contact
 
 # Список запрещенных слов
 FORBIDDEN_WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
@@ -18,7 +18,7 @@ class ProductForm(forms.ModelForm):
                 field.widget.attrs.update({'class': 'form-check-input'})
             else:
                 field.widget.attrs.update({'class': 'form-control'})
-        # Для поля категории добавим класс form-select
+        # Для Select добавим form-select
         self.fields['category'].widget.attrs.update({'class': 'form-select'})
         # Для поля изображения
         self.fields['image'].widget.attrs.update({'class': 'form-control'})
@@ -57,3 +57,25 @@ class ProductForm(forms.ModelForm):
             if image.content_type not in allowed_formats:
                 raise ValidationError('Допустимые форматы: JPEG, PNG')
         return image
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        label='Имя',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите ваше имя'})
+    )
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@mail.com'})
+    )
+    telegram = forms.CharField(
+        label='Telegram',
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '@username'})
+    )
+    message = forms.CharField(
+        label='Сообщение',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Ваше сообщение...'})
+    )
