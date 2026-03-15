@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'catalog.apps.CatalogConfig',
-    'blog.apps.BlogConfig',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -117,3 +117,12 @@ SHELL_PLUS = "ipython"
 
 # Email settings for development
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = 'noreply@example.com'
+
+# Замена модели пользователя
+AUTH_USER_MODEL = 'users.User'
+
+# URL для логина и выхода
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'catalog:home'
+LOGOUT_REDIRECT_URL = 'catalog:home'

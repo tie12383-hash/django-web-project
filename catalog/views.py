@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Category, Contact
 from .forms import ProductForm, ContactForm
 
@@ -27,7 +28,7 @@ class ProductDetailView(DetailView):
         context['title'] = self.object.name
         return context
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
@@ -38,7 +39,7 @@ class ProductCreateView(CreateView):
         context['title'] = 'Добавление товара'
         return context
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
@@ -51,7 +52,7 @@ class ProductUpdateView(UpdateView):
         context['title'] = 'Редактирование товара'
         return context
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
