@@ -20,13 +20,29 @@
             <h3 class="text-primary">{{ product.price }} руб.</h3>
             <p><strong>Описание:</strong></p>
             <p>{{ product.description|linebreaks }}</p>
-            <p><small class="text-muted">Добавлено: {{ product.created_at|date:"d.m.Y H:i" }}</small></p>
-            <p><small class="text-muted">Последнее обновление: {{ product.updated_at|date:"d.m.Y H:i" }}</small></p>
+            <p>
+                <small class="text-muted">Добавлено: {{ product.created_at|date:"d.m.Y H:i" }}</small><br>
+                <small class="text-muted">Владелец: {{ product.owner.email|default:"Не указан" }}</small><br>
+                <small class="text-muted">Статус: {% if product.is_published %}Опубликовано{% else %}Не опубликовано{% endif %}</small>
+            </p>
+
             <div class="d-flex justify-content-between mt-4">
                 <a href="{% url 'catalog:home' %}" class="btn btn-secondary">← Назад к списку</a>
                 <div>
-                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
-                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    {% if user == product.owner %}
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
+                    {% endif %}
+
+                    {% if user == product.owner or perms.catalog.delete_product %}
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
+
+                    {% if perms.catalog.can_unpublish_product and product.is_published %}
+                        <form method="post" action="{% url 'catalog:product_unpublish' product.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary">Снять с публикации</button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
