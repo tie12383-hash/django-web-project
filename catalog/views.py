@@ -1,9 +1,11 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, View
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect, get_object_or_404
 from .models import Product, Category, Contact
 from .forms import ProductForm, ContactForm
+
 
 class HomeView(ListView):
     model = Product
@@ -12,11 +14,16 @@ class HomeView(ListView):
     paginate_by = 6
     ordering = ['-created_at']
 
+    def get_queryset(self):
+        # Показываем только опубликованные товары
+        return Product.objects.filter(is_published=True).order_by('-created_at')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
         context['categories'] = Category.objects.all()[:4]
         return context
+
 
 class ProductDetailView(DetailView):
     model = Product
@@ -28,18 +35,30 @@ class ProductDetailView(DetailView):
         context['title'] = self.object.name
         return context
 
+
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:home')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление товара'
         return context
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+
+class OwnerRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        product = self.get_object()
+        return self.request.user == product.owner
+
+
+class ProductUpdateView(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
@@ -52,7 +71,14 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         context['title'] = 'Редактирование товара'
         return context
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+
+class ModeratorCanDeleteMixin(UserPassesTestMixin):
+    def test_func(self):
+        product = self.get_object()
+        return self.request.user == product.owner or self.request.user.has_perm('catalog.delete_product')
+
+
+class ProductDeleteView(LoginRequiredMixin, ModeratorCanDeleteMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
@@ -61,6 +87,21 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Удаление товара'
         return context
+
+
+class ModeratorRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.has_perm('catalog.can_unpublish_product')
+
+
+class ProductUnpublishView(LoginRequiredMixin, ModeratorRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, pk=kwargs['pk'])
+        product.is_published = False
+        product.save()
+        messages.success(request, f'Товар "{product.name}" снят с публикации.')
+        return redirect('catalog:product_detail', pk=product.pk)
+
 
 class ContactsView(FormView):
     template_name = 'catalog/contacts.html'

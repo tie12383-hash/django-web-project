@@ -1,8 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Product, Contact
+from .models import Product
 
-# Список запрещенных слов
 FORBIDDEN_WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
 class ProductForm(forms.ModelForm):
@@ -12,15 +11,9 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Стилизация полей через Bootstrap
         for field_name, field in self.fields.items():
-            if field_name == 'is_published':
-                field.widget.attrs.update({'class': 'form-check-input'})
-            else:
-                field.widget.attrs.update({'class': 'form-control'})
-        # Для Select добавим form-select
+            field.widget.attrs.update({'class': 'form-control'})
         self.fields['category'].widget.attrs.update({'class': 'form-select'})
-        # Для поля изображения
         self.fields['image'].widget.attrs.update({'class': 'form-control'})
 
     def clean_name(self):
@@ -49,10 +42,8 @@ class ProductForm(forms.ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            # Проверка размера
             if image.size > 5 * 1024 * 1024:
                 raise ValidationError('Размер файла не должен превышать 5 МБ')
-            # Проверка формата
             allowed_formats = ['image/jpeg', 'image/png']
             if image.content_type not in allowed_formats:
                 raise ValidationError('Допустимые форматы: JPEG, PNG')

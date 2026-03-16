@@ -1,10 +1,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
+from django.conf import settings
 
 
 class Category(models.Model):
-    """Модель категории товаров"""
     name = models.CharField(
         max_length=100,
         verbose_name='Название категории',
@@ -35,7 +35,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    """Модель товара"""
     name = models.CharField(
         max_length=200,
         verbose_name='Наименование',
@@ -77,18 +76,31 @@ class Product(models.Model):
         auto_now=True,
         verbose_name='Дата последнего изменения'
     )
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name='Опубликовано'
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='products',
+        verbose_name='Владелец',
+        null=True,  # временно для совместимости, можно сделать обязательным позже
+    )
 
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
         ordering = ['-created_at']
+        permissions = [
+            ("can_unpublish_product", "Can unpublish product"),
+        ]
 
     def __str__(self):
         return f'{self.name} - {self.price} руб.'
 
 
 class Contact(models.Model):
-    """Модель контактных данных"""
     name = models.CharField(
         max_length=100,
         verbose_name='Название',
