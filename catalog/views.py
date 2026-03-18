@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, get_object_or_404
 from .models import Product, Category, Contact
 from .forms import ProductForm, ContactForm
+from .service import get_products_by_category
 
 
 class HomeView(ListView):
@@ -125,3 +126,18 @@ class ContactsView(FormView):
         print("="*50 + "\n")
         messages.success(self.request, 'Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.')
         return super().form_valid(form)
+
+class CategoryProductsView(ListView):
+    template_name = 'catalog/category_products.html'
+    context_object_name = 'products'
+    paginate_by = 6
+
+    def get_queryset(self):
+        self.category = Category.objects.get(pk=self.kwargs['pk'])
+        return get_products_by_category(self.category.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        context['title'] = f'Категория: {self.category.name}'
+        return context
