@@ -13,35 +13,31 @@
 
 <div class="row mb-4">
     <div class="col-12">
-        <h2><i class="bi bi-grid"></i> Наши товары</h2>
+        <h2><i class="bi bi-grid"></i> Категории товаров</h2>
     </div>
 </div>
 
-<div class="row g-4 mb-5">
-    {% for product in page_obj %}
-    <div class="col-md-4">
-        <div class="card product-card h-100">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-            {% else %}
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <i class="bi bi-image display-4 text-muted"></i>
-                </div>
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text text-muted">{{ product.category.name }}</p>
-                <p class="card-text">{{ product.description|truncatechars:100 }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="text-primary">{{ product.price }} руб.</h4>
-                    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-primary">Подробнее</a>
-                </div>
+<div class="row g-4">
+    {% for category in categories %}
+    <div class="col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ category.name }}</h5>
+                <p class="card-text text-muted">{{ category.description|truncatechars:60 }}</p>
+                <p class="text-muted">
+                    <i class="bi bi-box"></i> Товаров: {{ category.products.count }}
+                </p>
+                <a href="{% url 'catalog:category_products' category.pk %}" class="btn btn-outline-primary">
+                    <i class="bi bi-eye"></i> Смотреть товары
+                </a>
             </div>
         </div>
     </div>
     {% empty %}
     <div class="col-12">
-        <div class="alert alert-info">Пока нет товаров.</div>
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Пока нет категорий
+        </div>
     </div>
     {% endfor %}
 </div>
